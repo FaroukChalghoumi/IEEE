@@ -1,5 +1,7 @@
+require ('dotenv').config()
 const express = require ('express')
-let PORT = 4000;
+const mongoose = require('mongoose')
+//let PORT = 4000; We can use .env file to store this variable PORT
 const reqRoutes = require('./routes/request')
 
 //express app 
@@ -17,9 +19,21 @@ app.get('/' , (req,res) => {
 })
 
 
+//connection to DB : MongoDB 
+mongoose.connect(process.env.MONGO_URI)
+.then(() => {
+    //We want be listening to request until we are connected to DB 
+    //listen to port 4000:
+    app.listen(process.env.PORT , () => {
+        console.log('Connected to IEEE cluster & Listening to Port', process.env.PORT)
+    })
+})
+.catch((error) => {
+    console.log(error)
+})
 
 
 //listen to port:
-app.listen(PORT , () => {
-    console.log('Listening to Port 4000')
-})
+/*app.listen(process.env.PORT , () => {
+    console.log('Listening to Port', process.env.PORT)
+})*/
